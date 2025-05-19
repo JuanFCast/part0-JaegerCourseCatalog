@@ -75,12 +75,17 @@ public class CatalogController {
         Timer.Sample timer = Timer.start(meterRegistry);
         Span span = tracer.spanBuilder("getSpecificCourse").startSpan();
         try {
-            Course course = restTemplate.getForObject(courseServiceUrl + "/1", Course.class);
-            String response = "Our first course is " + course.getCoursename();
-            logger.info("Returning first course information");
-            return response;
+            // 🔥 Forzar un error controlado para observabilidad
+            throw new RuntimeException("Forzado: este error es una prueba para Kibana");
+
+            // Código original (queda inaccesible por el throw de arriba)
+            // Course course = restTemplate.getForObject(courseServiceUrl + "/1", Course.class);
+            // String response = "Our first course is " + course.getCoursename();
+            // logger.info("Returning first course information");
+            // return response;
+
         } catch (Exception e) {
-            logger.error("Error in getSpecificCourse", e);
+            logger.error("Error en /firstcourse (simulado para ELK)", e);
             throw e;
         } finally {
             span.end();
